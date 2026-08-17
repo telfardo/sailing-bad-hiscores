@@ -297,6 +297,9 @@ td:nth-child(3) { text-align: left; }
 footer { padding: 23px 18px 30px; border-top: 2px solid #17120d; color: #777164; background: rgba(0,0,0,.68); text-align: center; }
 footer strong { color: #8bc63f; }
 footer p { margin: 5px 0 0; font-size: 11px; }
+.plugin-credit { margin-top: 10px; color: #8e856d; }
+.plugin-credit a { color: #a9ca72; text-underline-offset: 3px; }
+.plugin-credit a:hover { color: #d2ed9f; }
 .site-credit { margin-top: 9px; }
 .site-credit a { color: #9b906f; text-underline-offset: 3px; }
 .site-credit a:hover { color: #c6b98e; }

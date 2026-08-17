@@ -1,6 +1,8 @@
 # Sailing Bad HiScores
 
-An unofficial Old School RuneScape HiScores site that calculates totals without Sailing. Website lookups are not tracked; players only join the community leaderboard after opting in through the Sailing Bad RuneLite plugin.
+An unofficial Old School RuneScape HiScores site that calculates totals without Sailing. Website lookups are not tracked; players only join the community leaderboard after opting in through the Sailing Bad Plugin.
+
+The [Sailing Bad RuneLite Plugin](https://github.com/YonwiPlugins/sailing-bad) is maintained by [YonwiPlugins](https://github.com/YonwiPlugins). [Suggestions are welcome](https://github.com/YonwiPlugins/sailing-bad/issues).
 
 ## Deploy on Netlify
 
@@ -21,9 +23,9 @@ npm run dev
 
 The site is then available at the URL Vite prints, normally `http://localhost:5173`.
 
-## Plugin opt-in endpoint
+## Sailing Bad RuneLite Plugin opt-in
 
-When a player enables the Sailing Bad HiScores option, the plugin should send:
+When a player enables the HiScores option in the Sailing Bad Plugin, it should send:
 
 ```http
 POST https://2277.telfardo.com/api/hiscores
