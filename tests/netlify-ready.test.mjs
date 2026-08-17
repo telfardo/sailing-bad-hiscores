@@ -3,8 +3,12 @@ import { readFile } from "node:fs/promises";
 import test from "node:test";
 
 test("build output contains the Sailing Bad application", async () => {
-  const html = await readFile(new URL("../dist/index.html", import.meta.url), "utf8");
+  const [html, font] = await Promise.all([
+    readFile(new URL("../dist/index.html", import.meta.url), "utf8"),
+    readFile(new URL("../dist/fonts/runescape-uf.ttf", import.meta.url)),
+  ]);
   assert.match(html, /Sailing Bad Hiscores/);
+  assert.ok(font.byteLength > 10_000);
   assert.match(html, /src="\/assets\/[^"]+\.js"/);
 });
 
