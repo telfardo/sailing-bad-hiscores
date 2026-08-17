@@ -54,13 +54,27 @@ export default function Home() {
   }
 
   useEffect(() => {
-    fetch("/api/hiscores?category=Overall")
-      .then((response) => response.json())
+    const requestedPlayer = new URLSearchParams(window.location.search).get("player")?.trim() ?? "";
+    const endpoint = requestedPlayer
+      ? `/api/hiscores?player=${encodeURIComponent(requestedPlayer)}&category=Overall`
+      : "/api/hiscores?category=Overall";
+
+    fetch(endpoint)
+      .then(async (response) => {
+        const data = await response.json();
+        if (!response.ok) throw new Error(data.error || "The record book could not be opened just now.");
+        return data;
+      })
       .then((data) => {
         setLeaderboard(data.leaderboard ?? []);
         setTrackedCount(data.trackedCount ?? 0);
+        if (data.player) {
+          setPlayer(data.player);
+          setQuery(data.player.name);
+          window.setTimeout(() => document.getElementById("player-result")?.scrollIntoView({ behavior: "smooth", block: "center" }), 40);
+        }
       })
-      .catch(() => setError("The record book could not be opened just now."))
+      .catch((reason) => setError(reason instanceof Error ? reason.message : "The record book could not be opened just now."))
       .finally(() => setBoardLoading(false));
   }, []);
 

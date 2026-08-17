@@ -36,6 +36,8 @@ Content-Type: application/json
 
 `GET /api/hiscores?player=RuneScape%20Name` performs a private lookup without adding a new player. `POST` is the explicit opt-in operation.
 
+After a successful `POST`, the plugin opens `/?player=RuneScape%20Name#player-result`. The site loads that opted-in player automatically and scrolls to their result.
+
 ## Commands
 
 ```bash

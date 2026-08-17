@@ -1,34 +1,18 @@
 import { findPlayer, getLeaderboard, getLegacyRank, savePlayer, type SkillSnapshot, type StoredPlayer } from "../lib/hiscores";
+import { parseJagexHiscores, validatePlayerName } from "../lib/legacy-hiscores";
 
-const SKILLS = [
-  "Attack", "Defence", "Strength", "Hitpoints", "Ranged", "Prayer", "Magic", "Cooking",
-  "Woodcutting", "Fletching", "Fishing", "Firemaking", "Crafting", "Smithing", "Mining",
-  "Herblore", "Agility", "Thieving", "Slayer", "Farming", "Runecrafting", "Hunter", "Construction",
-];
 const CACHE_MS = 15 * 60 * 1000;
 const JSON_HEADERS = {
   "content-type": "application/json; charset=utf-8",
+  "cache-control": "no-store",
+  "x-sailing-bad-api": "netlify-function-v2",
   "access-control-allow-origin": "*",
   "access-control-allow-methods": "GET, POST, OPTIONS",
   "access-control-allow-headers": "content-type",
 };
 
-function json(body: unknown, status = 200) {
-  return new Response(JSON.stringify(body), { status, headers: JSON_HEADERS });
-}
-
-function normalizePlayerName(value: string) {
-  return value.replace(/[\u00a0_]+/g, " ").replace(/\s+/g, " ").trim();
-}
-
-function parseSkill(line: string, name: string): SkillSnapshot {
-  const [rankValue, levelValue, xpValue] = line.split(",").map(Number);
-  return {
-    name,
-    rank: Number.isFinite(rankValue) ? rankValue : -1,
-    level: Number.isFinite(levelValue) && levelValue > 0 ? levelValue : 1,
-    xp: Number.isFinite(xpValue) && xpValue > 0 ? xpValue : 0,
-  };
+function json(body: unknown, status = 200, headers: HeadersInit = {}) {
+  return new Response(JSON.stringify(body), { status, headers: { ...JSON_HEADERS, ...headers } });
 }
 
 function publicPlayer(player: StoredPlayer, rank: number, cached: boolean, tracked: boolean) {
@@ -58,31 +42,20 @@ async function fetchJagexPlayer(requestedName: string): Promise<StoredPlayer | R
   }
 
   if (response.status === 404) return json({ error: "That player was not found on the official HiScores." }, 404);
-  if (response.status === 429) return json({ error: "The official HiScores are busy. Please wait before trying again." }, 429);
+  if (response.status === 429) return json({ error: "The official HiScores are busy. Please wait before trying again." }, 503, { "retry-after": "60" });
   if (!response.ok) return json({ error: "The official HiScores are unavailable right now." }, 502);
 
-  const lines = (await response.text()).trim().split(/\r?\n/);
-  if (lines.length < 25) return json({ error: "Jagex returned an unfamiliar HiScores format." }, 502);
-
-  const skills = SKILLS.map((name, index) => parseSkill(lines[index + 1], name));
-  const sailing = parseSkill(lines[24], "Sailing");
-  return {
-    normalized_name: requestedName.toLowerCase(),
-    display_name: requestedName,
-    total_level: skills.reduce((sum, skill) => sum + skill.level, 0),
-    total_xp: skills.reduce((sum, skill) => sum + skill.xp, 0),
-    sailing_level: sailing.level,
-    sailing_xp: sailing.xp,
-    skills_json: JSON.stringify(skills),
-    updated_at: Date.now(),
-  };
+  try {
+    return parseJagexHiscores(await response.text(), requestedName);
+  } catch {
+    return json({ error: "Jagex returned an unfamiliar HiScores format." }, 502);
+  }
 }
 
 async function lookup(requestedName: string, optIn: boolean, category = "Overall") {
-  const name = normalizePlayerName(requestedName);
-  if (name.length === 0 || name.length > 12 || !/^[a-zA-Z0-9 -]+$/.test(name)) {
-    return json({ error: "Enter a valid RuneScape name of up to 12 characters." }, 400);
-  }
+  const validation = validatePlayerName(requestedName);
+  if (!validation.valid) return json({ error: validation.error }, 400);
+  const { name } = validation;
 
   const stored = await findPlayer(name.toLowerCase());
   if (stored && Date.now() - stored.updated_at < CACHE_MS) {
@@ -99,7 +72,7 @@ async function lookup(requestedName: string, optIn: boolean, category = "Overall
   return json({ player: publicPlayer(fetched, legacyRank, false, tracked), ...board });
 }
 
-export default async (request: Request) => {
+async function handleRequest(request: Request) {
   if (request.method === "OPTIONS") return new Response(null, { status: 204, headers: JSON_HEADERS });
 
   if (request.method === "GET") {
@@ -110,6 +83,14 @@ export default async (request: Request) => {
   }
 
   if (request.method === "POST") {
+    if (!request.headers.get("content-type")?.toLowerCase().includes("application/json")) {
+      return json({ error: "Content-Type must be application/json." }, 415);
+    }
+    const contentLength = Number(request.headers.get("content-length") ?? 0);
+    if (Number.isFinite(contentLength) && contentLength > 1_024) {
+      return json({ error: "Request body is too large." }, 413);
+    }
+
     let body: { player?: unknown };
     try {
       body = await request.json() as { player?: unknown };
@@ -121,7 +102,24 @@ export default async (request: Request) => {
       : json({ error: "A player name is required." }, 400);
   }
 
-  return json({ error: "Method not allowed." }, 405);
+  return json({ error: "Method not allowed." }, 405, { allow: "GET, POST, OPTIONS" });
+}
+
+export default async (request: Request) => {
+  try {
+    return await handleRequest(request);
+  } catch (error) {
+    console.error("HiScores function failed", error);
+    return json({ error: "The HiScores service is temporarily unavailable. Please try again shortly." }, 503);
+  }
 };
 
-export const config = { path: "/api/hiscores" };
+export const config = {
+  path: "/api/hiscores",
+  rateLimit: {
+    action: "rate_limit",
+    aggregateBy: ["ip"],
+    windowLimit: 60,
+    windowSize: 60,
+  },
+};
