@@ -17,6 +17,7 @@ type PlayerResult = {
 type LeaderboardRow = { rank: number; name: string; totalLevel: number; totalXp: number; updatedAt: string };
 
 const number = new Intl.NumberFormat("en-US");
+const pluginUrl = "https://github.com/YonwiPlugins/sailing-bad";
 const categories = [
   "Overall", "Attack", "Defence", "Strength", "Hitpoints", "Ranged", "Prayer", "Magic",
   "Cooking", "Woodcutting", "Fletching", "Fishing", "Firemaking", "Crafting", "Smithing",
@@ -99,6 +100,7 @@ export default function Home() {
           <a className="active" href="#hiscores">Hiscores</a>
           <a href="#lookup">Player Search</a>
           <a href="#about">About</a>
+          <a href={pluginUrl} target="_blank" rel="noreferrer">Get Sailing Bad</a>
         </nav>
 
         <div className="hiscores-layout">
@@ -155,7 +157,11 @@ export default function Home() {
                   <div><dt>XP</dt><dd>{number.format(player.totalXp)}</dd></div>
                   <div><dt>Sailing removed</dt><dd>{number.format(player.sailingLevel)}</dd></div>
                 </dl>
-                <p>{player.tracked ? "Opted in through Sailing Bad." : "Not tracked. Opt in through the plugin to join the board."}</p>
+                <p>
+                  {player.tracked
+                    ? "Opted in through Sailing Bad."
+                    : <>Not tracked. <a className="text-link" href={pluginUrl} target="_blank" rel="noreferrer">Get the plugin</a> to join the board.</>}
+                </p>
                 <details>
                   <summary>View skill breakdown</summary>
                   <div className="skill-grid">
@@ -183,7 +189,11 @@ export default function Home() {
                 </tbody>
               </table>
               {!boardLoading && leaderboard.length === 0 && (
-                <div className="empty-board"><strong>No players tracked yet.</strong><span>Opt in through Sailing Bad to claim rank 1.</span></div>
+                <div className="empty-board">
+                  <strong>No players tracked yet.</strong>
+                  <span>Opt in through Sailing Bad to claim rank 1.</span>
+                  <a className="plugin-cta" href={pluginUrl} target="_blank" rel="noreferrer">Get Sailing Bad</a>
+                </div>
               )}
               {boardLoading && <div className="empty-board"><span>Loading hiscores…</span></div>}
             </div>
@@ -193,6 +203,7 @@ export default function Home() {
         <section className="about-box" id="about">
           <h2>About Sailing Bad Hiscores</h2>
           <p>Stats come from the public Jagex HiScores. The Sailing Bad plugin only submits a player after they explicitly enable the HiScores option.</p>
+          <a className="about-plugin-link" href={pluginUrl} target="_blank" rel="noreferrer">View the Sailing Bad RuneLite plugin</a>
         </section>
 
         <footer>
