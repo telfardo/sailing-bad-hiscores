@@ -7,7 +7,7 @@ test("build output contains the Sailing Bad application", async () => {
     readFile(new URL("../dist/index.html", import.meta.url), "utf8"),
     readFile(new URL("../dist/fonts/runescape-uf.ttf", import.meta.url)),
   ]);
-  assert.match(html, /Sailing Bad Hiscores/);
+  assert.match(html, /Sailing Bad HiScores/);
   assert.ok(font.byteLength > 10_000);
   assert.match(html, /src="\/assets\/[^"]+\.js"/);
 });

@@ -5,12 +5,33 @@
   font-style: normal;
   font-weight: 400;
 }
+@font-face {
+  font-family: "RuneScape UF";
+  src: url("/fonts/runescape-uf.ttf") format("truetype");
+  font-display: swap;
+  font-style: normal;
+  font-weight: 700;
+}
+@font-face {
+  font-family: "RuneStar Plain 12";
+  src: url("/fonts/runestar-plain-12.ttf") format("truetype");
+  font-display: swap;
+  font-style: normal;
+  font-weight: 400;
+}
+@font-face {
+  font-family: "RuneStar Bold 12";
+  src: url("/fonts/runestar-bold-12.ttf") format("truetype");
+  font-display: swap;
+  font-style: normal;
+  font-weight: 400;
+}
 
 :root {
-  font-family: "RuneScape UF", Arial, Helvetica, sans-serif;
+  font-family: "RuneStar Plain 12", monospace;
   color: #f4f4f4;
   background: #000;
-  font-synthesis: none;
+  font-synthesis: weight;
 }
 
 * { box-sizing: border-box; }
@@ -18,6 +39,10 @@ html { scroll-behavior: smooth; }
 body { margin: 0; min-width: 320px; min-height: 100vh; background: #000; }
 button, input { font: inherit; }
 a { color: inherit; }
+strong, b, label, th, .tab-nav a, .category-banner, .player-search button, .about-box h2 {
+  font-family: "RuneStar Bold 12", monospace;
+  font-weight: 400;
+}
 
 .page-shell { min-height: 100vh; }
 .site-frame {
@@ -87,7 +112,7 @@ a { color: inherit; }
   text-decoration: none;
   box-shadow: inset 0 0 0 1px #090706;
 }
-.tab-nav a.active { color: #fff; font-weight: 700; }
+.tab-nav a.active { color: #fff; font-weight: 400; }
 .tab-nav a:hover { color: #c8ef76; }
 
 .hiscores-layout {
@@ -118,9 +143,9 @@ a { color: inherit; }
   border-block: 1px solid #87652c;
   background: linear-gradient(#e3cb82, #c9a352 58%, #b88b3e);
   box-shadow: 0 5px 5px rgba(0,0,0,.52), inset 0 1px rgba(255,247,202,.65), inset 0 -2px rgba(97,61,18,.22);
-  font-family: "RuneScape UF", Georgia, serif;
+  font-family: "RuneStar Bold 12", monospace;
   font-size: 26px;
-  font-weight: 700;
+  font-weight: 400;
   letter-spacing: .08em;
   line-height: 1;
   text-align: center;
@@ -169,18 +194,24 @@ a { color: inherit; }
 .parchment {
   position: relative;
   min-height: 760px;
-  padding: 105px 55px 110px;
+  padding: 22px 20px 30px;
+  border-style: solid;
+  border-width: 72px 32px 68px;
+  border-image-source: url("/parchment-scroll.png");
+  border-image-slice: 65 28 56 28 fill;
+  border-image-width: 72px 32px 68px;
+  border-image-repeat: stretch;
   color: #17130e;
-  background: transparent url("/parchment-scroll.png") center / 100% 100% no-repeat;
+  background: transparent;
   filter: drop-shadow(6px 10px 12px rgba(0,0,0,.62));
-  font-family: "RuneScape UF", Arial, sans-serif;
+  font-family: "RuneStar Plain 12", monospace;
 }
 .parchment::before,
 .parchment::after {
   display: none;
 }
 .parchment-heading { text-align: center; }
-.parchment-heading h1 { margin: 0; font-size: 25px; font-weight: 400; }
+.parchment-heading h1 { margin: 0; font-size: 23px; font-weight: 400; }
 .parchment-heading p { margin: 4px 0 16px; font-size: 13px; }
 
 .player-search {
@@ -282,7 +313,12 @@ footer p { margin: 5px 0 0; font-size: 11px; }
   .category-banner { left: 50%; width: 220px; transform: translateX(-50%); font-size: 25px; }
   .category-list { grid-template-columns: repeat(3, 1fr); gap: 3px 7px; }
   .category-list button { min-height: 22px; font-size: 12px; }
-  .parchment { width: 100%; padding: 105px 30px 110px; }
+  .parchment {
+    width: 100%;
+    padding: 18px 10px 25px;
+    border-width: 58px 18px 55px;
+    border-image-width: 58px 18px 55px;
+  }
   table { font-size: 14px; }
   th { font-size: 12px; }
   th, td { padding-inline: 4px; }

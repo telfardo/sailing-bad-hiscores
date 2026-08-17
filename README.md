@@ -1,4 +1,4 @@
-# Sailing Bad Hiscores
+# Sailing Bad HiScores
 
 An unofficial Old School RuneScape HiScores site that calculates totals without Sailing. Website lookups are not tracked; players only join the community leaderboard after opting in through the Sailing Bad RuneLite plugin.
 

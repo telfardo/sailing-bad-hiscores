@@ -91,13 +91,13 @@ export default function Home() {
 
         <header className="stone-header">
           <div className="title-plaque">
-            <strong>Sailing Bad Hiscores</strong>
+            <strong>Sailing Bad HiScores</strong>
             <span>Old School totals without Sailing</span>
           </div>
         </header>
 
         <nav className="tab-nav" aria-label="Main navigation">
-          <a className="active" href="#hiscores">Hiscores</a>
+          <a className="active" href="#hiscores">HiScores</a>
           <a href="#lookup">Player Search</a>
           <a href="#about">About</a>
           <a href={pluginUrl} target="_blank" rel="noreferrer">Get Sailing Bad</a>
@@ -123,7 +123,7 @@ export default function Home() {
 
           <section className="parchment" id="hiscores">
             <div className="parchment-heading">
-              <h1>{selectedCategory === "Overall" ? "Legacy Overall Hiscores" : `${selectedCategory} Hiscores`}</h1>
+              <h1>{selectedCategory === "Overall" ? "Legacy Overall HiScores" : `${selectedCategory} HiScores`}</h1>
               <p>{number.format(trackedCount)} opted-in player{trackedCount === 1 ? "" : "s"}</p>
             </div>
 
@@ -174,7 +174,7 @@ export default function Home() {
             )}
 
             <div className="table-wrap">
-              <table aria-label={`${selectedCategory} Hiscores`}>
+              <table aria-label={`${selectedCategory} HiScores`}>
                 <thead><tr><th aria-label="Opted in" /><th>Rank</th><th>Name</th><th>Level</th><th>XP</th></tr></thead>
                 <tbody>
                   {leaderboard.map((row) => (
@@ -195,19 +195,19 @@ export default function Home() {
                   <a className="plugin-cta" href={pluginUrl} target="_blank" rel="noreferrer">Get Sailing Bad</a>
                 </div>
               )}
-              {boardLoading && <div className="empty-board"><span>Loading hiscores…</span></div>}
+              {boardLoading && <div className="empty-board"><span>Loading HiScores…</span></div>}
             </div>
           </section>
         </div>
 
         <section className="about-box" id="about">
-          <h2>About Sailing Bad Hiscores</h2>
+          <h2>About Sailing Bad HiScores</h2>
           <p>Stats come from the public Jagex HiScores. The Sailing Bad plugin only submits a player after they explicitly enable the HiScores option.</p>
           <a className="about-plugin-link" href={pluginUrl} target="_blank" rel="noreferrer">View the Sailing Bad RuneLite plugin</a>
         </section>
 
         <footer>
-          <strong>Sailing Bad Hiscores</strong>
+          <strong>Sailing Bad HiScores</strong>
           <p>Unofficial fan site. Not affiliated with or endorsed by Jagex Ltd.</p>
           <p className="site-credit">Built by <a href="https://telfardo.com" target="_blank" rel="noreferrer">Telfardo</a></p>
         </footer>
