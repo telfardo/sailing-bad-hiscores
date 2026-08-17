@@ -168,35 +168,19 @@ a { color: inherit; }
 
 .parchment {
   position: relative;
-  min-height: 720px;
-  padding: 42px 34px 45px;
+  min-height: 760px;
+  padding: 105px 55px 110px;
   color: #17130e;
-  background:
-    radial-gradient(circle at 18% 12%, rgba(114,78,31,.16), transparent 22%),
-    radial-gradient(circle at 74% 62%, rgba(133,90,30,.12), transparent 25%),
-    repeating-linear-gradient(5deg, rgba(91,60,23,.03) 0 1px, transparent 1px 4px),
-    #d7c58d;
-  box-shadow: 5px 9px 18px rgba(0,0,0,.75), inset 0 0 25px rgba(80,49,14,.22);
+  background: transparent url("/parchment-scroll.png") center / 100% 100% no-repeat;
+  filter: drop-shadow(6px 10px 12px rgba(0,0,0,.62));
   font-family: "RuneScape UF", Arial, sans-serif;
 }
 .parchment::before,
 .parchment::after {
-  content: "";
-  position: absolute;
-  z-index: 2;
-  left: -14px;
-  right: -14px;
-  height: 30px;
-  pointer-events: none;
-  border: 1px solid #aa8846;
-  border-radius: 50% / 45%;
-  background: linear-gradient(#ead99d 0%, #dbc17a 38%, #b99147 67%, #e0c982 100%);
-  box-shadow: inset 0 2px rgba(255,248,205,.58), inset 0 -3px rgba(101,66,23,.2), 0 4px 4px rgba(0,0,0,.34);
+  display: none;
 }
-.parchment::before { top: -14px; }
-.parchment::after { bottom: -14px; transform: rotate(180deg); }
 .parchment-heading { text-align: center; }
-.parchment-heading h1 { margin: 0; font-size: 20px; }
+.parchment-heading h1 { margin: 0; font-size: 25px; font-weight: 400; }
 .parchment-heading p { margin: 4px 0 16px; font-size: 13px; }
 
 .player-search {
@@ -298,7 +282,7 @@ footer p { margin: 5px 0 0; font-size: 11px; }
   .category-banner { left: 50%; width: 220px; transform: translateX(-50%); font-size: 25px; }
   .category-list { grid-template-columns: repeat(3, 1fr); gap: 3px 7px; }
   .category-list button { min-height: 22px; font-size: 12px; }
-  .parchment { width: 100%; padding: 38px 14px 40px; }
+  .parchment { width: 100%; padding: 105px 30px 110px; }
   table { font-size: 14px; }
   th { font-size: 12px; }
   th, td { padding-inline: 4px; }
