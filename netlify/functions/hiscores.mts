@@ -67,7 +67,13 @@ async function lookup(requestedName: string, optIn: boolean, category = "Overall
   if (fetched instanceof Response) return fetched;
 
   const tracked = optIn || stored !== null;
-  if (tracked) await savePlayer(fetched);
+  if (tracked) {
+    // Jagex's index_lite rows carry no canonical spelling, so display_name is
+    // only ever the name somebody typed. A visitor searching an existing player
+    // must not restyle them, so a refresh keeps the name already on the board;
+    // only the opt-in, which comes from the player's own client, can set it.
+    await savePlayer(stored && !optIn ? { ...fetched, display_name: stored.display_name } : fetched);
+  }
   const [legacyRank, board] = await Promise.all([getLegacyRank(fetched.total_level, fetched.total_xp), getLeaderboard(category)]);
   return json({ player: publicPlayer(fetched, legacyRank, false, tracked), ...board });
 }
