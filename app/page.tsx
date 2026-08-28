@@ -103,8 +103,6 @@ export default function Home() {
   return (
     <main className="page-shell" id="top">
       <div className="site-frame">
-        <div className="login-strip">Unofficial Old School community project</div>
-
         <header className="stone-header">
           <div className="title-plaque">
             <strong>Sailing Bad HiScores</strong>
